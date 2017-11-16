@@ -10,4 +10,7 @@ public class LevelData {
     //tile types
     // . = no tile
     // 1 = grass
+
+    //Active objects
+    // c = coin
 }

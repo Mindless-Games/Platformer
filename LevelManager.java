@@ -47,7 +47,7 @@ public class LevelManager {
         loadMapData(context, pixelsPerMeter, px, py);
 
         //ready to play
-        playing = true;
+        //playing = true;
     }
 
     public Bitmap getBitmap(char blockType) {
@@ -62,6 +62,12 @@ public class LevelManager {
                 break;
             case 'p':
                 index = 2;
+                break;
+            case 'c':
+                index = 3;
+                break;
+            case 's':
+                index = 4;
                 break;
             default:
                 index = 0;
@@ -84,12 +90,32 @@ public class LevelManager {
             case 'p':
                 index = 2;
                 break;
+            case 'c':
+                index = 3;
+                break;
+            case 's':
+                index = 4;
+                break;
             default:
                 index = 0;
                 break;
         }
 
         return index;
+    }
+
+    public boolean isPlaying() {
+        return playing;
+    }
+
+    public void switchPlayingStatus() {
+        playing = !playing;
+        if(playing) {
+            gravity = 6;
+        }
+        else {
+            gravity = 0;
+        }
     }
 
     private void loadMapData(Context context, int pixelsPerMeter, float px, float py) {
@@ -120,6 +146,12 @@ public class LevelManager {
                             //reference to player
                             player = (Player)gameObjects.get(playerIndex);
 
+                            break;
+                        case 'c':
+                            gameObjects.add(new Coin(j, i, c));
+                            break;
+                        case 's':
+                            gameObjects.add(new Spike(j, i, c));
                             break;
                     }
                     //if the bitmap isnt prepared yet

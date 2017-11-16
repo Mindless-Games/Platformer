@@ -1,9 +1,10 @@
 package games.mindless.bobhop;
 
 
-public class Grass extends GameObject {
 
-    Grass(float worldStartX, float worldStartY, char type) {
+public class Spike extends GameObject {
+
+    Spike(float worldStartX, float worldStartY, char type) {
         final float HEIGHT = 1;
         final float WIDTH = 1;
 
@@ -13,7 +14,7 @@ public class Grass extends GameObject {
         setType(type);
 
         //choose bitmap
-        setBitmapName("grass");
+        setBitmapName("spike");
 
         //where time starts
         setWorldLocation(worldStartX, worldStartY, 0);

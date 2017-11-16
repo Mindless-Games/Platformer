@@ -3,8 +3,18 @@ package games.mindless.bobhop;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 public abstract class GameObject {
+
+    private RectHitbox rectHitbox = new RectHitbox();
+
+    private float xVelocity;
+    private float yVelocity;
+    private boolean moves = false;
+    final int LEFT = -1;
+    final int RIGHT = 1;
+    private int facing;
 
     private Vector2Point5D worldLocation;
     private float width;
@@ -16,6 +26,31 @@ public abstract class GameObject {
     private char type;
 
     private String bitmapName;
+
+    private Animation anim = null;
+    private boolean animated;
+    private int animFps = 1;
+
+    public void setAnimFps(int animFps) {
+        this.animFps = animFps;
+    }
+
+    public void setAnimFrameCount(int animFrameCount) {
+        this.animFrameCount = animFrameCount;
+    }
+
+    public boolean isAnimated() {
+        return animated;
+    }
+
+    public void setAnimated(Context context, int pixelsPerMeter, boolean animated) {
+        this.animated = animated;
+        this.anim = new Animation(context, bitmapName, height, width, animFps, animFrameCount, pixelsPerMeter);
+    }
+
+    public Rect getRectToDraw(long deltaTime) {
+        return anim.getCurrentFrame(deltaTime, xVelocity, isMoves());
+    }
 
     public abstract void update(long fps, float gravity);
 
@@ -39,6 +74,14 @@ public abstract class GameObject {
         return bitmap;
     }
 
+    public void setWorldLocationY(float y) {
+        this.worldLocation.y = y;
+    }
+
+    public void setWorldLocationX(float x) {
+        this.worldLocation.x = x;
+    }
+
     public Vector2Point5D getWorldLocation() {
         return worldLocation;
     }
@@ -48,6 +91,66 @@ public abstract class GameObject {
         this.worldLocation.x = x;
         this.worldLocation.y = y;
         this.worldLocation.z = z;
+    }
+
+    void move(long fps) {
+        if(xVelocity != 0) {
+            this.worldLocation.x += xVelocity / fps;
+        }
+        if(yVelocity != 0) {
+            this.worldLocation.y += yVelocity / fps;
+        }
+    }
+
+    public void setRectHitbox() {
+        rectHitbox.setTop(worldLocation.y);
+        rectHitbox.setLeft(worldLocation.x);
+        rectHitbox.setBottom(worldLocation.y + height);
+        rectHitbox.setRight(worldLocation.x + width);
+    }
+
+    RectHitbox getRectHitbox() {
+        return rectHitbox;
+    }
+
+    public int getfacing() {
+        return facing;
+    }
+
+    public void setFacing(int facing) {
+        this.facing = facing;
+    }
+
+    public float getxVelocity() {
+        return xVelocity;
+    }
+
+    public void setxVelocity(float xVelocity){
+        if(moves) {
+            this.xVelocity = xVelocity;
+        }
+    }
+
+    public float getyVelocity() {
+        return yVelocity;
+    }
+
+    public void setyVelocity(float yVelocity) {
+        if(moves) {
+            this.yVelocity = yVelocity;
+        }
+    }
+
+    public boolean isMoves() {
+        return moves;
+    }
+
+    public void setMoves(boolean moves) {
+        this.moves = moves;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public void setBitmapName(String bitmapName) {

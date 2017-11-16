@@ -26,8 +26,8 @@ public class ViewPort {
         screenCenterX = screenXResolution / 2;
         screenCenterY = screenYResolution / 2;
 
-        pixelsPerMeterX = screenXResolution / 32;
-        pixelsPerMeterY = screenYResolution / 18;
+        pixelsPerMeterX = screenXResolution / 16;
+        pixelsPerMeterY = screenYResolution / 9;
 
         metersToShowX = 34;
         metersToShowY = 20;
