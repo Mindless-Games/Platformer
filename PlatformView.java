@@ -57,7 +57,7 @@ public class PlatformView extends SurfaceView implements Runnable {
         ps = new PlayerState();
 
         //load first level
-        loadLevel("Level1", 0, 9);
+        loadLevel("Level1", 0, 15);
     }
 
     @Override
@@ -102,6 +102,18 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 location = new PointF(ps.loadLocation().x, ps.loadLocation().y);
                                 lm.player.setWorldLocationX(location.x);
                                 lm.player.setWorldLocationY(location.y);
+                                break;
+                            case 'r':
+                                PointF location1;
+                                location1 = new PointF(ps.loadLocation().x, ps.loadLocation().y);
+                                lm.player.setWorldLocationX(location1.x);
+                                lm.player.setWorldLocationY(location1.y);
+                                break;
+                            case 't':
+                                lm.player.setWorldLocationX(4);
+                                lm.player.setWorldLocationY(15);
+                                break;
+
                             default:
                                 if(hit == 1) { // runs into something
                                     lm.player.setxVelocity(0);

@@ -69,6 +69,12 @@ public class LevelManager {
             case 's':
                 index = 4;
                 break;
+            case 'r':
+                index = 5;
+                break;
+            case 't':
+                index = 6;
+                break;
             default:
                 index = 0;
                 break;
@@ -95,6 +101,12 @@ public class LevelManager {
                 break;
             case 's':
                 index = 4;
+                break;
+            case 'r':
+                index = 5;
+                break;
+            case 't':
+                index = 6;
                 break;
             default:
                 index = 0;
@@ -152,6 +164,12 @@ public class LevelManager {
                             break;
                         case 's':
                             gameObjects.add(new Spike(j, i, c));
+                            break;
+                        case 'r':
+                            gameObjects.add(new SpikeRight(j, i, c));
+                            break;
+                        case 't':
+                            gameObjects.add(new Portal(j, i, c));
                             break;
                     }
                     //if the bitmap isnt prepared yet

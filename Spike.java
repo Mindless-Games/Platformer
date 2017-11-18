@@ -16,7 +16,7 @@ public class Spike extends GameObject {
         //choose bitmap
         setBitmapName("spike");
 
-        //where time starts
+        //where tile starts
         setWorldLocation(worldStartX, worldStartY, 0);
         setRectHitbox();
     }
