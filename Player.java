@@ -145,6 +145,39 @@ public class Player extends GameObject {
         return collided;
     }
 
+    public int checkCollisions(RectHitbox triHitbox1, RectHitbox triHitbox2) {
+        int collided = 0; //no collisions
+
+        //left
+        if(this.rectHitboxLeft.intersects(triHitbox1)) {
+            //left has collided
+            this.setWorldLocationX(triHitbox1.right - getWidth() * .2f);
+            collided = 1;
+        }
+
+        //right
+        if(this.rectHitboxRight.intersects(triHitbox1)) {
+            //right has collided
+            this.setWorldLocationX(triHitbox1.left - getWidth() * .8f);
+            collided = 1;
+        }
+
+        //feet
+        if(this.rectHitboxFeet.intersects(triHitbox1)) {
+            //feet have collided
+            this.setWorldLocationY(triHitbox1.top - getHeight());
+            collided = 2;
+        }
+
+        //head
+        if(this.rectHitboxHead.intersects(triHitbox1)) {
+            //head has collided
+            this.setWorldLocationY(triHitbox1.bottom);
+            collided = 3;
+        }
+        return collided;
+    }
+
     public void startJump(SoundManager sm) {
         if(!isFalling) {
             if(!isJumping) {

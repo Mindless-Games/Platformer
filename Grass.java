@@ -18,6 +18,8 @@ public class Grass extends GameObject {
         //where time starts
         setWorldLocation(worldStartX, worldStartY, 0);
         setRectHitbox();
+
+        setTraversable();
     }
 
     @Override

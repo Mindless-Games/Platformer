@@ -1,8 +1,6 @@
 package games.mindless.bobhop;
 
-/**
- * Created by Andrew on 11/14/2017.
- */
+
 
 public class RectHitbox {
 

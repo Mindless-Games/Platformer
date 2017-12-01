@@ -53,6 +53,18 @@ public class ViewPort {
         return pixelsPerMeterX;
     }
 
+    public int getPixelsPerMeterY() {
+        return pixelsPerMeterY;
+    }
+
+    public int getyCenter() {
+        return screenCenterY;
+    }
+
+    public float getViewportWorldCenterY() {
+        return getPixelsPerMeterY();
+    }
+
     public Rect worldToScreen(float objectX, float objectY, float objectWidth, float objectheight) {
         int left = (int)(screenCenterX - ((currentViewportWorldCenter.x - objectX) * pixelsPerMeterX));
 

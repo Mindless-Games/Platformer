@@ -4,6 +4,7 @@ package games.mindless.bobhop;
 
 public class Spike extends GameObject {
 
+
     Spike(float worldStartX, float worldStartY, char type) {
         final float HEIGHT = 1;
         final float WIDTH = 1;
@@ -18,7 +19,8 @@ public class Spike extends GameObject {
 
         //where tile starts
         setWorldLocation(worldStartX, worldStartY, 0);
-        setRectHitbox();
+
+        setTriHitbox();
     }
 
     @Override

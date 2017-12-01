@@ -1,7 +1,6 @@
 package games.mindless.bobhop;
 
-import android.location.Location;
-
+//import android.location.Location;
 import java.util.ArrayList;
 
 

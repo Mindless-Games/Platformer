@@ -7,7 +7,13 @@ import android.graphics.Rect;
 
 public abstract class GameObject {
 
+    private boolean traversable = false;
+
     private RectHitbox rectHitbox = new RectHitbox();
+
+    private RectHitbox triHitbox1 = new RectHitbox();
+    private RectHitbox triHitbox2 = new RectHitbox();
+    private RectHitbox triHitbox3 = new RectHitbox();
 
     private float xVelocity;
     private float yVelocity;
@@ -109,6 +115,17 @@ public abstract class GameObject {
         rectHitbox.setRight(worldLocation.x + width);
     }
 
+    public void setTriHitbox() {
+        triHitbox1.setTop(worldLocation.y + (2*height/3));
+        triHitbox1.setLeft(worldLocation.x + (width/10));
+        triHitbox1.setBottom(worldLocation.y + height);
+        triHitbox1.setRight(worldLocation.x + (9*width/10));
+    }
+
+    RectHitbox getTriHitbox() {
+        return triHitbox1;
+    }
+
     RectHitbox getRectHitbox() {
         return rectHitbox;
     }
@@ -191,5 +208,13 @@ public abstract class GameObject {
 
     public void setType(char type) {
         this.type = type;
+    }
+
+    public void setTraversable() {
+        traversable = true;
+    }
+
+    public boolean isTraversable() {
+        return traversable;
     }
 }

@@ -22,7 +22,7 @@ public class Portal extends GameObject {
         this.target = new Location(target.level, target.x, target.y);
 
         //where time starts
-        setWorldLocation(worldStartX, worldStartY, 0);
+        setWorldLocation(worldStartX, worldStartY - 1f, 0);
         setRectHitbox();
     }
 

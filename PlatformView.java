@@ -40,6 +40,8 @@ public class PlatformView extends SurfaceView implements Runnable {
     SoundManager sm;
     private PlayerState ps;
 
+    private String level;
+
     public PlatformView(Context context, int screenWidth, int screenHeight) {
         super(context);
         this.context = context;
@@ -57,7 +59,7 @@ public class PlatformView extends SurfaceView implements Runnable {
         ps = new PlayerState();
 
         //load first level
-        loadLevel("Level1", 0, 15);
+        loadLevel("Level1", 0, 14);
     }
 
     @Override
@@ -89,29 +91,41 @@ public class PlatformView extends SurfaceView implements Runnable {
 
                     //check collisions with player
                     int hit = lm.player.checkCollisions(go.getRectHitbox());
-                    if (hit > 0) {
+                    int hit2 = lm.player.checkCollisions(go.getTriHitbox());
+                    if (hit > 0 || hit2 > 0) {
                         switch (go.getType()) {
                             case 'c':
+                                //picks up coin
                                 sm.playSound("coin_pickup");
                                 go.setActive(false);
                                 go.setVisible(false);
                                 ps.gotCredit();
                                 break;
                             case 's':
+                                //hits spike
                                 PointF location;
                                 location = new PointF(ps.loadLocation().x, ps.loadLocation().y);
                                 lm.player.setWorldLocationX(location.x);
                                 lm.player.setWorldLocationY(location.y);
                                 break;
                             case 'r':
-                                PointF location1;
-                                location1 = new PointF(ps.loadLocation().x, ps.loadLocation().y);
-                                lm.player.setWorldLocationX(location1.x);
-                                lm.player.setWorldLocationY(location1.y);
+                                //hits right spike
+                                location = new PointF(ps.loadLocation().x, ps.loadLocation().y);
+                                lm.player.setWorldLocationX(location.x);
+                                lm.player.setWorldLocationY(location.y);
                                 break;
                             case 't':
-                                lm.player.setWorldLocationX(4);
-                                lm.player.setWorldLocationY(15);
+                                //goes into portal
+                                Portal portal = (Portal) go;
+                                Location t = portal.getTarget();
+                                loadLevel(t.level, t.x, t.y);
+                                break;
+                            case 'g':
+                                //hit by guard
+                                ps.loseLife();
+                                location = new PointF(ps.loadLocation().x, ps.loadLocation().y);
+                                lm.player.setWorldLocationX(location.x);
+                                lm.player.setWorldLocationY(location.y);
                                 break;
 
                             default:
@@ -128,6 +142,7 @@ public class PlatformView extends SurfaceView implements Runnable {
 
                     if(lm.isPlaying()) {
                         go.update(fps, lm.gravity);
+
                     }
 
                 }
@@ -153,6 +168,9 @@ public class PlatformView extends SurfaceView implements Runnable {
             //rub out last frame with arbitrary color
             paint.setColor(Color.argb(255,0,0,255));
             canvas.drawColor(Color.argb(255,0,0,255));
+
+            //draw parallax backgrounds from -1 to -3
+            drawBackground(0, -3);
 
             //draw all GameObjects
             Rect toScreen2d = new Rect();
@@ -193,6 +211,10 @@ public class PlatformView extends SurfaceView implements Runnable {
                     }
                 }
             }
+
+            //draw parallax backgrounds from layer 1 to 3
+            drawBackground(4, 0);
+
             //text for debugging
             if(debugging) {
                 paint.setTextSize(40);
@@ -238,6 +260,50 @@ public class PlatformView extends SurfaceView implements Runnable {
 
             //unlock and draw the scene
             ourHolder.unlockCanvasAndPost(canvas);
+        }
+    }
+
+    private void drawBackground(int start, int stop) {
+        Rect fromRect1 = new Rect();
+        Rect toRect1 = new Rect();
+        Rect fromRect2 = new Rect();
+        Rect toRect2 = new Rect();
+
+        for(Background bg : lm.backgrounds) {
+            if(bg.z < start && bg.z > stop) {
+                if(!vp.clipObjects(-1, bg.y, 1000, bg.height)) {
+                    float floatstartY = ((vp.getyCenter() - ((vp.getViewportWorldCenterY() - bg.y) * vp.getPixelsPerMeterY())));
+                    int startY = (int)floatstartY;
+
+                    float floatendY = ((vp.getyCenter() - ((vp.getViewportWorldCenterY() - bg.endY) * vp.getPixelsPerMeterY())));
+                    int endY = (int)floatendY;
+
+                    fromRect1 = new Rect(0, 0, bg.width - bg.xClip, bg.height);
+                    toRect1 = new Rect(bg.xClip, startY, bg.width, endY);
+
+                    fromRect2 = new Rect(bg.width - bg.xClip, 0, bg.width, bg.height);
+                    toRect2 = new Rect(0, startY, bg.xClip, endY);
+                }
+            }
+
+            if(!bg.reversedFirst) {
+                canvas.drawBitmap(bg.bitmap, fromRect1, toRect1, paint);
+                canvas.drawBitmap(bg.bitmapReversed, fromRect2, toRect2, paint);
+            }
+            else {
+                canvas.drawBitmap(bg.bitmap, fromRect2, toRect2, paint);
+                canvas.drawBitmap(bg.bitmapReversed, fromRect1, toRect1, paint);
+            }
+
+            bg.xClip -= lm.player.getxVelocity() / (20 / bg.speed);
+            if(bg.xClip >= bg.width) {
+                bg.xClip = 0;
+                bg.reversedFirst = !bg.reversedFirst;
+            }
+            else if(bg.xClip <= 0) {
+                bg.xClip = bg.width;
+                bg.reversedFirst = !bg.reversedFirst;
+            }
         }
     }
 
